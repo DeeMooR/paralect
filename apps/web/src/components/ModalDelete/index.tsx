@@ -24,7 +24,7 @@ const ModalDelete = ({ title, opened, close, apply }: IModalDelete) => {
         <Modal.Header>
           <Modal.CloseButton />
         </Modal.Header>
-        <Modal.Body ml={15} mr={15}>
+        <Modal.Body ml={20} mr={20}>
           <Title order={3} ta="center" mb={25}>
             {title}
           </Title>

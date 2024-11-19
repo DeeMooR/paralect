@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { Button, Stack, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
-import { ModalDelete, Table } from 'components';
+import { ModalVacancy, Table } from 'components';
 
 import { ResponseToVacancy } from 'types';
 
@@ -15,15 +15,16 @@ const data = [
     company: 'Paralect',
     vacancy: 'Frontend developer',
     salaryRange: '500 - 1000',
-    responseStatus: 'active',
+    status: 'active',
     note: 'test task',
   },
 ];
 
 const Vacancies: NextPage = () => {
-  const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
+  // const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
+  const [openedVacancy, { open: openVacancy, close: closeVacancy }] = useDisclosure(false);
 
-  const deleteResponse = () => {};
+  // const deleteResponse = () => {};
 
   return (
     <>
@@ -35,7 +36,7 @@ const Vacancies: NextPage = () => {
         <Title order={1} m="0 auto">
           List of responses to vacancies
         </Title>
-        <Button size="md" ml="auto" radius={12} color="blue" onClick={openDelete}>
+        <Button size="md" ml="auto" radius={12} color="blue" onClick={openVacancy}>
           Add response
         </Button>
 
@@ -50,7 +51,8 @@ const Vacancies: NextPage = () => {
           />
         </Stack>
       </Stack>
-      <ModalDelete title="Delete response?" opened={openedDelete} close={closeDelete} apply={deleteResponse} />
+      {/* <ModalDelete title="Delete response?" opened={openedDelete} close={closeDelete} apply={deleteResponse} /> */}
+      <ModalVacancy title="Update response?" defaultValues={data[0]} opened={openedVacancy} close={closeVacancy} />
     </>
   );
 };

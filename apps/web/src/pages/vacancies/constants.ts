@@ -22,7 +22,7 @@ export const COLUMNS: ColumnDef<ResponseToVacancy>[] = [
     cell: (info) => info.getValue(),
   },
   {
-    accessorKey: 'responseStatus',
+    accessorKey: 'status',
     header: 'Status',
     cell: (info) => info.getValue(),
   },
