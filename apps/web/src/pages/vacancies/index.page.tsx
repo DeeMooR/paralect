@@ -2,7 +2,6 @@ import { ForwardRefExoticComponent, useMemo, useState } from 'react';
 import React, { NextPage } from 'next';
 import Head from 'next/head';
 import { Button, Stack, Title } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { IconPencil, IconProps, IconTrash } from '@tabler/icons-react';
 
 import { ModalDelete, ModalVacancy, Table } from 'components';
@@ -13,7 +12,7 @@ import { COLUMNS, DEFAULT_PAGE, PER_PAGE } from './constants';
 
 const data = [
   {
-    _id: 'asdasd',
+    _id: '1',
     company: 'Paralect',
     vacancy: 'Frontend developer',
     salaryRange: '500 - 1000',
@@ -24,25 +23,26 @@ const data = [
 
 const Vacancies: NextPage = () => {
   const iconSize = 24;
-  const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
-  const [openedVacancy, { open: openVacancy, close: closeVacancy }] = useDisclosure(false);
-  const [interactionId, setInteractionId] = useState<string | null>(null);
+  const [idDelete, setIdDelete] = useState('');
+  const [idVacancy, setIdVacancy] = useState('');
 
   const deleteResponse = () => {};
 
-  const getButton = (id: string, Icon: ForwardRefExoticComponent<IconProps>, onClickAction: () => void) => {
+  const getButton = (
+    id: string,
+    Icon: ForwardRefExoticComponent<IconProps>,
+    onClickAction: (value: string) => void,
+  ) => {
     const onClick = () => {
-      setInteractionId(id);
-      onClickAction();
+      onClickAction(id);
     };
     return <Icon size={iconSize} onClick={onClick} />;
   };
 
-  const getBtnUpdate = (id: string) => getButton(id, IconPencil, openVacancy);
-  const getBtnDelete = (id: string) => getButton(id, IconTrash, openDelete);
+  const getBtnUpdate = (id: string) => getButton(id, IconPencil, setIdVacancy);
+  const getBtnDelete = (id: string) => getButton(id, IconTrash, setIdVacancy);
 
-  const getResponseById = (): ResponseToVacancy | undefined =>
-    interactionId ? data.find((item) => item._id === interactionId) : undefined;
+  const getResponseById = (): ResponseToVacancy | undefined => data.find((item) => item._id === idVacancy);
 
   const dataWithButtons = useMemo(
     () =>
@@ -64,7 +64,7 @@ const Vacancies: NextPage = () => {
         <Title order={1} m="0 auto">
           List of responses to vacancies
         </Title>
-        <Button size="md" ml="auto" radius={12} color="blue" onClick={openVacancy}>
+        <Button size="md" ml="auto" radius={12} color="blue" onClick={() => setIdVacancy('1')}>
           Add response
         </Button>
 
@@ -79,12 +79,12 @@ const Vacancies: NextPage = () => {
           />
         </Stack>
       </Stack>
-      <ModalDelete title="Delete response?" opened={openedDelete} close={closeDelete} apply={deleteResponse} />
+      <ModalDelete title="Delete response?" opened={!!idDelete} close={() => setIdDelete('')} apply={deleteResponse} />
       <ModalVacancy
         title="Update response?"
         defaultValues={getResponseById()}
-        opened={openedVacancy}
-        close={closeVacancy}
+        opened={!!idVacancy}
+        close={() => setIdVacancy('')}
       />
     </>
   );

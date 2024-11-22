@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Group, Modal, Stack, TextInput, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,11 +20,16 @@ const ModalVacancy = ({ title, defaultValues, opened, close }: IModalVacancy) =>
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreateResponseToVacancyParams>({
     resolver: zodResolver(createResponseToVacancySchema),
-    defaultValues: { ...defaultValues },
+    defaultValues,
   });
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues]);
 
   const onSubmit = () => {};
 
