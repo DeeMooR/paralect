@@ -23,7 +23,7 @@ const ModalVacancy = ({ title, defaultValues, opened, close }: IModalVacancy) =>
     formState: { errors },
   } = useForm<CreateResponseToVacancyParams>({
     resolver: zodResolver(createResponseToVacancySchema),
-    defaultValues,
+    defaultValues: { ...defaultValues },
   });
 
   const onSubmit = () => {};

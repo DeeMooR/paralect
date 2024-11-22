@@ -1,11 +1,13 @@
+import { ForwardRefExoticComponent, useMemo, useState } from 'react';
 import React, { NextPage } from 'next';
 import Head from 'next/head';
 import { Button, Stack, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { IconPencil, IconProps, IconTrash } from '@tabler/icons-react';
 
-import { ModalVacancy, Table } from 'components';
+import { ModalDelete, ModalVacancy, Table } from 'components';
 
-import { ResponseToVacancy } from 'types';
+import { ResponseToVacancy, ResponseToVacancyTable } from 'types';
 
 import { COLUMNS, DEFAULT_PAGE, PER_PAGE } from './constants';
 
@@ -21,10 +23,36 @@ const data = [
 ];
 
 const Vacancies: NextPage = () => {
-  // const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
+  const iconSize = 24;
+  const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
   const [openedVacancy, { open: openVacancy, close: closeVacancy }] = useDisclosure(false);
+  const [interactionId, setInteractionId] = useState<string | null>(null);
 
-  // const deleteResponse = () => {};
+  const deleteResponse = () => {};
+
+  const getButton = (id: string, Icon: ForwardRefExoticComponent<IconProps>, onClickAction: () => void) => {
+    const onClick = () => {
+      setInteractionId(id);
+      onClickAction();
+    };
+    return <Icon size={iconSize} onClick={onClick} />;
+  };
+
+  const getBtnUpdate = (id: string) => getButton(id, IconPencil, openVacancy);
+  const getBtnDelete = (id: string) => getButton(id, IconTrash, openDelete);
+
+  const getResponseById = (): ResponseToVacancy | undefined =>
+    interactionId ? data.find((item) => item._id === interactionId) : undefined;
+
+  const dataWithButtons = useMemo(
+    () =>
+      data.map((obj) => ({
+        ...obj,
+        btnUpdate: getBtnUpdate(obj._id),
+        btnDelete: getBtnDelete(obj._id),
+      })),
+    [],
+  );
 
   return (
     <>
@@ -41,8 +69,8 @@ const Vacancies: NextPage = () => {
         </Button>
 
         <Stack gap="lg">
-          <Table<ResponseToVacancy>
-            data={data}
+          <Table<ResponseToVacancyTable>
+            data={dataWithButtons}
             pageCount={1}
             page={DEFAULT_PAGE}
             perPage={PER_PAGE}
@@ -51,8 +79,13 @@ const Vacancies: NextPage = () => {
           />
         </Stack>
       </Stack>
-      {/* <ModalDelete title="Delete response?" opened={openedDelete} close={closeDelete} apply={deleteResponse} /> */}
-      <ModalVacancy title="Update response?" defaultValues={data[0]} opened={openedVacancy} close={closeVacancy} />
+      <ModalDelete title="Delete response?" opened={openedDelete} close={closeDelete} apply={deleteResponse} />
+      <ModalVacancy
+        title="Update response?"
+        defaultValues={getResponseById()}
+        opened={openedVacancy}
+        close={closeVacancy}
+      />
     </>
   );
 };

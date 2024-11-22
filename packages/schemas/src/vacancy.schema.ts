@@ -12,6 +12,19 @@ export const responseToVacancySchema = dbSchema
   })
   .strip();
 
+export const responseToVacancyTableSchema = responseToVacancySchema
+  .pick({
+    company: true,
+    vacancy: true,
+    salaryRange: true,
+    status: true,
+    note: true,
+  })
+  .extend({
+    btnUpdate: z.any(),
+    btnDelete: z.any(),
+  });
+
 export const createResponseToVacancySchema = responseToVacancySchema.pick({
   company: true,
   vacancy: true,
