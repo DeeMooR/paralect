@@ -10,6 +10,7 @@ export const useGetResponseToVacancy = () =>
   useQuery<ResponseToVacancy[]>({
     queryKey: ['responseToVacancy'],
     queryFn: () => apiService.get('/responseToVacancy'),
+    staleTime: 5 * 1000,
   });
 
 export const useCreateResponseToVacancy = <T = UpdateResponseToVacancyParams>() =>

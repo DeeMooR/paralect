@@ -5,16 +5,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { createResponseToVacancySchema } from 'schemas';
-import { CreateResponseToVacancyParams, ResponseToVacancy } from 'types';
+import { ResponseToVacancy, UpdateResponseToVacancyParams } from 'types';
 
 interface IModalVacancy {
   title: string;
   defaultValues?: ResponseToVacancy;
   opened: boolean;
   close: () => void;
+  apply: (data: UpdateResponseToVacancyParams) => void;
 }
 
-const ModalVacancy = ({ title, defaultValues, opened, close }: IModalVacancy) => {
+const ModalVacancy = ({ title, defaultValues, opened, close, apply }: IModalVacancy) => {
   const isMobile = useMediaQuery('(max-width: 50em)');
 
   const {
@@ -22,7 +23,7 @@ const ModalVacancy = ({ title, defaultValues, opened, close }: IModalVacancy) =>
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreateResponseToVacancyParams>({
+  } = useForm<UpdateResponseToVacancyParams>({
     resolver: zodResolver(createResponseToVacancySchema),
     defaultValues,
   });
@@ -31,7 +32,9 @@ const ModalVacancy = ({ title, defaultValues, opened, close }: IModalVacancy) =>
     reset(defaultValues);
   }, [defaultValues]);
 
-  const onSubmit = () => {};
+  const onSubmit = (data: UpdateResponseToVacancyParams) => {
+    apply(data);
+  };
 
   return (
     <Modal.Root opened={opened} onClose={close} size="md" fullScreen={isMobile} centered>
