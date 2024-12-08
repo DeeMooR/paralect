@@ -13,6 +13,9 @@ export enum RoutePath {
   Home = '/',
   Profile = '/profile',
 
+  // Public paths
+  Vacancies = '/vacancies',
+
   // Auth paths
   SignIn = '/sign-in',
   SignUp = '/sign-up',
@@ -39,6 +42,11 @@ export const routesConfiguration: RoutesConfiguration = {
   [RoutePath.Profile]: {
     scope: ScopeType.PRIVATE,
     layout: LayoutType.MAIN,
+  },
+
+  // Private routes
+  [RoutePath.Vacancies]: {
+    scope: ScopeType.PUBLIC,
   },
 
   // Auth routes
